@@ -1,0 +1,8 @@
+[Bb]in
+[Bb]uild
+.vscode
+CMakeFiles
+.atom-dbg.cson
+compile_commands.json
+cquery_log.txt
+include CMakeFiles
