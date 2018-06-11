@@ -171,7 +171,7 @@ void learn()
         if(gen%GEN_PRINT_DELAY==0)
         {
             printf("Generation: %d, Max Score: %d, inst %d %d, min %d\n", gen, Scores[theBest[0]], 
-                gPopulation[0].mGenes[0].mCode.size(), gPopulation[0].mGenes.size(), min);
+                gPopulation[theBest[0]].mGenes[0].mCode.size(), gPopulation[theBest[0]].mGenes.size(), min);
             for(int i = 0;i<NUM_SURVIVORS;i++)
             {
                 printf("%d ", Scores[theBest[i]]);
@@ -180,7 +180,7 @@ void learn()
 
             if(SAVE_FILE!="")
             {
-                gPopulation[0].save(SAVE_FILE);
+                gPopulation[theBest[0]].save(SAVE_FILE);
             }
         }
         
@@ -199,10 +199,10 @@ void learn()
                 
                 gPopulation[i].mutate();
             }
-            else if(Scores[i]==0)
-            {
-                gPopulation[i].mutate();
-            }
+            // else if(Scores[i]==0)
+            // {
+            //     gPopulation[i].mutate();
+            // }
             // Scores[i] = 0;
         }
         memset(Scores, 0, POP_SIZE*sizeof(int));
