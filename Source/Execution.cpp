@@ -28,7 +28,7 @@ void Execution::run_code(const Genotype *indi, int code_id)
         
         if(type==INST_SET)
         {
-            arg1 += mInputSize;
+            // arg1 += mInputSize;
             if(arg1 >= mRegisterSize)
             {
                 arg1 = mRegisterSize-1;
@@ -37,7 +37,7 @@ void Execution::run_code(const Genotype *indi, int code_id)
         }
         else if(type==INST_COPY)
         {
-            arg2 += mInputSize;
+            // arg2 += mInputSize;
             if(arg1 >= mRegisterSize)
             {
                 arg1 = mRegisterSize-1;

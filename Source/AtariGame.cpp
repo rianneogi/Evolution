@@ -36,9 +36,11 @@ int run_atari(AtariGame& game, Execution& exe, const Genotype* indi)
     // exe.mInputs = game.mALE->getRAM().array();
     // exe.mInputSize = game.mALE->getRAM().size();
     int totalReward = 0;
+    // indi->print();
     while(!game.is_over())
     {
         // exe.reset();
+        exe.resetStep();
         
         // auto screen = game.mALE->getScreen();
         // auto ram = game.mALE->getRAM();

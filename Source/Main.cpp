@@ -47,7 +47,7 @@ void learn()
     }
     
     //Init
-    for(int i = 0;i<POP_SIZE;i++)
+    for(int i = 1;i<POP_SIZE;i++) //mutate everyone except first
     {
         gPopulation[i].mutate();
         Scores[i] = 0;
@@ -124,10 +124,6 @@ void learn()
         }
         
         //Cull
-        // for(int i = 0;i<1000;i++)
-        // {
-        //     LastBest[i] = 0;
-        // }
         memset(LastBest, 0, POP_SIZE*sizeof(int));
         for(int i = 0;i<NUM_SURVIVORS;i++)
         {
@@ -139,10 +135,18 @@ void learn()
                 {
                     continue;
                 }
-                if(Scores[j]>=max)
+                if(Scores[j]>max)
                 {
                     max = Scores[j];
                     max_id = j;
+                }
+                else if(Scores[j]>=max)
+                {
+                    if(gPopulation[j].mGenes[0].mCode.size() >= gPopulation[max_id].mGenes[0].mCode.size()) //save the one with more instructions
+                    {
+                        max = Scores[j];
+                        max_id = j;
+                    }
                 }
             }
             theBest[i] = max_id;
@@ -176,7 +180,7 @@ void learn()
 
             if(SAVE_FILE!="")
             {
-                gPopulation[0].save("tictactoe_best");
+                gPopulation[0].save(SAVE_FILE);
             }
         }
         

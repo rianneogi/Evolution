@@ -20,7 +20,7 @@ void Genotype::mutate()
     for(int i = 0;i<mGenes.size();i++)
     {
         int x = rand()%MUT_NUM;
-        mGenes[rand()%mGenes.size()].mutate(x);    
+        mGenes[i].mutate(x);    
     }
 }
 

@@ -32,6 +32,11 @@ class Execution
         mCurrentStep = 0;
     }
 
+    void resetStep()
+    {
+        mCurrentStep = 0;
+    }
+
     void print(int num_registers) const
     {
         assert(num_registers <= mRegisterSize);
