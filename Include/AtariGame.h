@@ -14,4 +14,4 @@ public:
     void restart();
 };
 
-int run_atari(AtariGame& game, Execution& exe, const Genotype* indi);
+int run_atari(AtariGame& game, Execution& exe, const Genotype* indi, const ALEState& baseState);

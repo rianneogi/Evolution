@@ -17,7 +17,7 @@ void learn()
     
     AtariGame game("ALE/roms/space_invaders.bin",123,false);
     // TicTacToe game;
-    
+    ALEState baseState = game.mALE->cloneSystemState();
     // const int REG_SIZE = 1000;
     // const int INPUT_SIZE = 10;
     const int INPUT_SIZE = game.mALE->getRAM().size();
@@ -71,7 +71,7 @@ void learn()
             //     Scores[i] += play_tictactoe(&gPopulation[i], exe, game);
             // }
             
-            Scores[i] = run_atari(game, exe, &gPopulation[i]);
+            Scores[i] = run_atari(game, exe, &gPopulation[i], baseState);
             
             printf("Gen %d, Agent %d: Score %d, Inst: %d\n", gen, i, Scores[i], gPopulation[i].mGenes[0].mCode.size());
             
