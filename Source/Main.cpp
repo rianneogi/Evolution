@@ -13,7 +13,7 @@ void learn()
     const int GEN_PRINT_DELAY = 1;
 
     const int POP_SIZE = 100;
-    const int NUM_SURVIVORS = 5;
+    const int NUM_SURVIVORS = 3;
     
     AtariGame game("ALE/roms/space_invaders.bin",123,false);
     // TicTacToe game;
