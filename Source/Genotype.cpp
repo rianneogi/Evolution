@@ -1,6 +1,8 @@
 #include "Genotype.h"
 #include <fstream>
 
+const int CLONE_CHANCE = 5;
+
 Genotype::Genotype()
 {
     mGenes.push_back(Gene());
@@ -13,7 +15,7 @@ Genotype::~Genotype()
 
 void Genotype::mutate()
 {
-    if(rand()%100 < 5)
+    if(rand()%100 < CLONE_CHANCE)
     {
         mGenes.push_back(Gene(mGenes[rand()%mGenes.size()]));
     }

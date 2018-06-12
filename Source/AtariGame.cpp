@@ -31,9 +31,9 @@ void AtariGame::restart()
 
 int run_atari(AtariGame& game, Execution& exe, const Genotype* indi, const ALEState& baseState)
 {
-    // game.restart();
+    game.restart();
     exe.reset();
-    game.mALE->restoreSystemState(baseState);
+    // game.mALE->restoreSystemState(baseState);
     // exe.mInputs = game.mALE->getRAM().array();
     // exe.mInputSize = game.mALE->getRAM().size();
     int totalReward = 0;

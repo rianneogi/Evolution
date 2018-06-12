@@ -21,7 +21,7 @@ void learn()
     // const int REG_SIZE = 1000;
     // const int INPUT_SIZE = 10;
     const int INPUT_SIZE = game.mALE->getRAM().size();
-    const int REG_SIZE = 1000;
+    const int REG_SIZE = 8;
     printf("INPUT SIZE: %d\n", INPUT_SIZE);
     
     Execution exe;
@@ -73,7 +73,7 @@ void learn()
             
             Scores[i] = run_atari(game, exe, &gPopulation[i], baseState);
             
-            printf("Gen %d, Agent %d: Score %d, Inst: %d\n", gen, i, Scores[i], gPopulation[i].mGenes[0].mCode.size());
+            printf("Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, Scores[i], gPopulation[i].mGenes[0].mCode.size(), gPopulation[i].mGenes.size());
             
             // for(int j = 0;j<NUM_SURVIVORS;j++)
             // {
@@ -227,6 +227,8 @@ int main()
     // 
     // Genotype indi;
     // indi.load("tictactoe_best");
+    // indi.print();
+    // int x; std::cin >> x;
     // 
     // play_human(&indi, exe);
 

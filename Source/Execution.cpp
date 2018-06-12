@@ -29,31 +29,36 @@ void Execution::run_code(const Genotype *indi, int code_id)
         if(type==INST_SET)
         {
             // arg1 += mInputSize;
-            if(arg1 >= mRegisterSize)
-            {
-                arg1 = mRegisterSize-1;
-            }
+            arg1 = arg1%mRegisterSize;
+            // if(arg1 >= mRegisterSize)
+            // {
+            //     arg1 = mRegisterSize-1;
+            // }
             mRegisters[arg1] = arg2;
         }
         else if(type==INST_COPY)
         {
             // arg2 += mInputSize;
-            if(arg1 >= mRegisterSize)
-            {
-                arg1 = mRegisterSize-1;
-            }
-            if(arg2 >= mRegisterSize)
-            {
-                arg2 = mRegisterSize-1;
-            }
+            arg1 = arg1%mRegisterSize;
+            arg2 = arg2%mRegisterSize;
+
+            // if(arg1 >= mRegisterSize)
+            // {
+            //     arg1 = mRegisterSize-1;
+            // }
+            // if(arg2 >= mRegisterSize)
+            // {
+            //     arg2 = mRegisterSize-1;
+            // }
             mRegisters[arg1] = mRegisters[arg2];
         }
         else if(type==INST_JUMP)
         {
-            if(arg1 >= mRegisterSize)
-            {
-                arg1 = mRegisterSize-1;
-            }
+            arg1 = arg1%mRegisterSize;
+            // if(arg1 >= mRegisterSize)
+            // {
+            //     arg1 = mRegisterSize-1;
+            // }
             if(mRegisters[arg1]==2)
             {
                 i = arg2-1;
@@ -61,6 +66,7 @@ void Execution::run_code(const Genotype *indi, int code_id)
         }
         else if(type==INST_FUNC)
         {
+            // arg1 = arg1%indi->mGenes[code_id].mCode.size();
             if(arg1 >= indi->mGenes[code_id].mCode.size())
             {
                 arg1 = indi->mGenes[code_id].mCode.size()-1;
@@ -69,22 +75,25 @@ void Execution::run_code(const Genotype *indi, int code_id)
         }
         else if(type==INST_COPY_INPUT)
         {
-            if(arg1 >= mInputSize)
-            {
-                arg1 = mInputSize-1;
-            }
-            if(arg2 >= mRegisterSize)
-            {
-                arg2 = mRegisterSize-1;
-            }
+            arg1 = arg1%mRegisterSize;
+            arg2 = arg2%mInputSize;
+            // if(arg2 >= mInputSize)
+            // {
+            //     arg2 = mInputSize-1;
+            // }
+            // if(arg1 >= mRegisterSize)
+            // {
+            //     arg1 = mRegisterSize-1;
+            // }
             mRegisters[arg1] = mInputs[arg2];
         }
         else if(type==INST_JUMP_INPUT)
         {
-            if(arg1 >= mInputSize)
-            {
-                arg1 = mInputSize-1;
-            }
+            arg1 = arg1%mInputSize;
+            // if(arg1 >= mInputSize)
+            // {
+            //     arg1 = mInputSize-1;
+            // }
             if(mInputs[arg1]==2)
             {
                 i = arg2-1;

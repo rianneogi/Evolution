@@ -1,6 +1,6 @@
 #include "Gene.h"
 
-std::string gInstructionStrings[] = {"COPY", "SET", "JMP", "CALL"};
+std::string gInstructionStrings[] = {"COPY", "SET", "JMP", "CALL", "COPY_IP", "JUMP_IP"};
 
 Gene::Gene()
 {
@@ -25,7 +25,7 @@ void Gene::mutate(int type)
     }
     else if(type==MUT_ADD)
     {
-        mCode.insert(mCode.begin()+(rand()%mCode.size()), Instruction(rand()%INST_NUM,rand()%10,rand()%10));
+        mCode.insert(mCode.begin()+(rand()%mCode.size()), Instruction(rand()%INST_NUM,rand()%128,rand()%128));
     }
     else if(type==MUT_CHANGE)
     {
