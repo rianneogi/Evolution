@@ -206,6 +206,8 @@ void learn()
             // Scores[i] = 0;
         }
         memset(Scores, 0, POP_SIZE*sizeof(int));
+
+        if(gen==1)   break;
     }
 
     delete[] gPopulation;
@@ -216,8 +218,8 @@ int main()
     srand(time(0));
     std::string s;
     
-    // learn();
-    test_lua();
+    learn();
+    // test_lua();
     // test_execution();
     // test_save();
     
@@ -233,13 +235,19 @@ int main()
     // 
     // play_human(&indi, exe);
 
-    // AtariGame game("ALE/roms/space_invaders.bin",123,true);
-    // while(!game.is_over())
+    // AtariGame game("ALE/roms/space_invaders.bin",123,false);
+    // for(int i = 0;i<100;i++)
     // {
-    //     ActionVect vect = game.mALE->getMinimalActionSet();
-    //     int size = vect.size();
-    //     game.make_move(rand()%size);
+    //     game.restart();
+    //     while(!game.is_over())
+    //     {
+    //         ActionVect vect = game.mALE->getMinimalActionSet();
+    //         int size = vect.size();
+    //         game.make_move(rand()%size);
+    //     }
+    //     printf("%d\n", i);
     // }
+    
     
     return 0;
 }
