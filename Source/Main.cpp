@@ -216,7 +216,8 @@ int main()
     srand(time(0));
     std::string s;
     
-    learn();
+    // learn();
+    test_lua();
     // test_execution();
     // test_save();
     

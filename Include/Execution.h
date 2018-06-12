@@ -31,7 +31,8 @@ class Execution
 
     void run_code(const Genotype *indi, int code_id);
     void compile_lua(const Genotype* indi, const std::string& path, int id);
-    void run_lua(const std::string& path, int id);
+    int run_lua(const std::string& path, int id);
+    void load_lua(const std::string& path);
 
     void reset()
     {

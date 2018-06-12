@@ -116,3 +116,35 @@ void test_save()
     
     indi2.print();
 }
+
+void test_lua()
+{
+    Execution exe;
+    exe.mRegisterSize = 8;
+    exe.mInputSize = 128;
+    exe.mInputs = new byte_t[128];
+    for(int i = 0;i<128;i++)
+    {
+        exe.mInputs[i] = 0;
+    }
+
+    Genotype indi;
+    indi.mGenes[0].mCode.push_back(Instruction(INST_SET, 25, 2));
+    indi.mGenes[0].mCode.push_back(Instruction(INST_JUMP, 7, 8));
+    indi.mGenes[0].mCode.push_back(Instruction(INST_JUMP, 8, 6));
+    indi.mGenes[0].mCode.push_back(Instruction(INST_SET, 0, 8));
+    indi.mGenes[0].mCode.push_back(Instruction(INST_JUMP, 25, 10));
+    indi.mGenes[0].mCode.push_back(Instruction(INST_SET, 0, 7));
+    indi.mGenes[0].mCode.push_back(Instruction(INST_JUMP, 25, 10));
+    indi.mGenes[0].mCode.push_back(Instruction(INST_SET, 0, 6));
+    indi.mGenes[0].mCode.push_back(Instruction(INST_JUMP, 25, 10));
+    indi.mGenes[0].mCode.push_back(Instruction());
+
+    exe.compile_lua(&indi, "Lua/simple.lua", 0);
+    exe.load_lua("Lua/simple.lua");
+    int res = exe.run_lua("Lua/simple.lua", 0);
+    printf("res %d\n", res);
+    std::cin >> res;
+
+    delete[] exe.mInputs;
+}
