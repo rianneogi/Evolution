@@ -101,3 +101,42 @@ void Execution::run_code(const Genotype *indi, int code_id)
         }
     }
 }
+
+void Execution::compile_lua(const Genotype* indi, const std::string& path, int id)
+{
+    std::fstream file;
+    file.open(path, std::ios::out | std::ios::trunc);
+    
+    if(!file.is_open())
+    {
+        printf("Unable to open lua file %s\n", path.c_str());
+    }
+
+    for(int i = 0;i<indi->mGenes.size();i++)
+    {
+        for(int j = 0;j<indi->mGenes[i].mCode.size();j++)
+        {
+            
+        }
+    }
+
+    // printf("Loading Cards...\n");
+	mLua = luaL_newstate(); //create new lua state
+	luaL_openlibs(mLua);
+
+	//lua_register(LuaCards, "loadcard", loadcard); //register loadcard
+	// registerLua(mLua); //register functions
+
+	if (luaL_loadfile(mLua, path.c_str()) || lua_pcall(mLua, 0, 0, 0))
+	{
+		printf("Error: failed to load %s\n", path.c_str());
+		printf("%s\n", lua_tostring(mLua, -1));
+		// _getch();
+		return;
+	}
+}
+
+void Execution::run_lua(const std::string& path, int id)
+{
+
+}
