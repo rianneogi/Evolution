@@ -5,6 +5,7 @@ AtariGame::AtariGame(const std::string& rom, int seed, bool display)
     mALE = new ALEInterface(display);
 	mALE->setInt("random_seed", seed);
 	mALE->loadROM(rom);
+    mBaseState = mALE->cloneSystemState();
 }
 
 AtariGame::~AtariGame()
@@ -29,17 +30,23 @@ void AtariGame::restart()
     mALE->reset_game();
 }
 
-int run_atari(AtariGame& game, Execution& exe, const Genotype* indi, const ALEState& baseState)
+void AtariGame::resetState()
+{
+    mALE->restoreSystemState(mBaseState);
+}
+
+int run_atari(AtariGame& game, Execution& exe, const Genotype* indi)
 {
     game.restart();
+    // game.resetState();
     exe.reset();
-    // game.mALE->restoreSystemState(baseState);
     // exe.mInputs = game.mALE->getRAM().array();
     // exe.mInputSize = game.mALE->getRAM().size();
     int totalReward = 0;
     // indi->print();
     while(!game.is_over())
     {
+        totalReward += game.mALE->act(PLAYER_A_FIRE);
         // exe.reset();
         exe.resetStep();
         

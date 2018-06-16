@@ -3,22 +3,213 @@
 #include <iostream>
 #include <cmath>
 
-Genotype* gPopulation;
-
-void learn()
+void learn_sup()
 {
-    const std::string LOAD_FILE = "tictactoe_best";
-    const std::string SAVE_FILE = "tictactoe_best";
+    const std::string LOAD_FILE = "breakout_best";
+    const std::string SAVE_FILE = "breakout_best";
 
     const int GEN_PRINT_DELAY = 1;
 
-    const int POP_SIZE = 100;
-    const int NUM_SURVIVORS = 3;
+    const int SUP_SIZE = 10;
+    const int POP_SIZE = 10;
+    const int NUM_SURVIVORS = 1;
     
-    AtariGame game("ALE/roms/space_invaders.bin",123,false);
-    // TicTacToe game;
+    AtariGame game("ALE/roms/breakout.bin",123,false);
+    // game.mALE->act(PLAYER_A_FIRE);
     ALEState baseState = game.mALE->cloneSystemState();
-    // const int REG_SIZE = 1000;
+    const int INPUT_SIZE = game.mALE->getRAM().size();
+    const int REG_SIZE = 8;
+    printf("INPUT SIZE: %d\n", INPUT_SIZE);
+    
+    Execution exe;
+    exe.mRegisters = new int[REG_SIZE];
+    exe.mRegisterSize = REG_SIZE;
+    exe.mInputSize = INPUT_SIZE;
+    exe.mInputs = game.mALE->getRAM().array();
+    exe.reset();
+    
+    Genotype* gSupervisors = new Genotype[SUP_SIZE];
+    Genotype* gPopulation = new Genotype[POP_SIZE*SUP_SIZE];
+    int* Scores = new int[POP_SIZE*SUP_SIZE];
+    int* LastBest = new int[POP_SIZE*SUP_SIZE];
+
+    //Load
+    if(LOAD_FILE!="")
+    {
+        gPopulation[0].load(LOAD_FILE);
+        for(int i = 1;i<POP_SIZE*SUP_SIZE;i++)
+        {
+            gPopulation[i] = gPopulation[0];
+        }
+    }
+    
+    //Init
+    for(int i = 1;i<POP_SIZE*SUP_SIZE;i++) //mutate everyone except first
+    {
+        gPopulation[i].mutate();
+        Scores[i] = 0;
+        LastBest[i] = 0;
+    }
+    for(int i = 0;i<SUP_SIZE;i++)
+    {
+        gSupervisors[i].mutate();
+    }
+    
+    std::vector<int> theBest;
+    theBest.resize(NUM_SURVIVORS*SUP_SIZE);
+    
+    bool running = true;
+    for(int gen = 0; running; gen++)
+    {
+        for(int pop_gen = 0;pop_gen < 10;pop_gen++)
+        {
+            //Test
+            for(int i = 0;i<POP_SIZE*SUP_SIZE;i++)
+            {
+                // if(Scores[i]!=0) continue;
+                
+                // for(int j = 0;j<20;j++)
+                // {
+                //     Scores[i] += play_tictactoe(&gPopulation[i], exe, game);
+                // }
+                
+                Scores[i] = run_atari(game, exe, &gPopulation[i], baseState);
+                
+                printf("Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, Scores[i], gPopulation[i].mGenes[0].mCode.size(), gPopulation[i].mGenes.size());
+            }
+
+            memset(LastBest, 0, POP_SIZE*SUP_SIZE*sizeof(int));
+            for(int i = 0;i<NUM_SURVIVORS*SUP_SIZE;i++)
+            {
+                int max = 0;
+                int max_id = 0;
+                for(int j = 0;j<POP_SIZE;j++)
+                {
+                    if(LastBest[j] == 1)
+                    {
+                        continue;
+                    }
+                    if(Scores[j]>max)
+                    {
+                        max = Scores[j];
+                        max_id = j;
+                    }
+                    else if(Scores[j]>=max)
+                    {
+                        if(gPopulation[j].mGenes[0].mCode.size() >= gPopulation[max_id].mGenes[0].mCode.size()) //save the one with more instructions
+                        {
+                            max = Scores[j];
+                            max_id = j;
+                        }
+                    }
+                }
+                theBest[i] = max_id;
+                LastBest[max_id] = 1;
+            }
+        }
+
+        memset(LastBest, 0, POP_SIZE*sizeof(int));
+        for(int i = 0;i<NUM_SURVIVORS;i++)
+        {
+            int max = 0;
+            int max_id = 0;
+            for(int j = 0;j<POP_SIZE;j++)
+            {
+                if(LastBest[j] == 1)
+                {
+                    continue;
+                }
+                if(Scores[j]>max)
+                {
+                    max = Scores[j];
+                    max_id = j;
+                }
+                else if(Scores[j]>=max)
+                {
+                    if(gPopulation[j].mGenes[0].mCode.size() >= gPopulation[max_id].mGenes[0].mCode.size()) //save the one with more instructions
+                    {
+                        max = Scores[j];
+                        max_id = j;
+                    }
+                }
+            }
+            theBest[i] = max_id;
+            LastBest[max_id] = 1;
+        }
+        
+        int min = 10000;
+        int min_id = 0;
+        for(int j = 0;j<POP_SIZE;j++)
+        {
+            if(LastBest[j] == 1)
+            {
+                continue;
+            }
+            if(Scores[j]<min)
+            {
+                min = Scores[j];
+                min_id = j;
+            }
+        }
+        
+        if(gen%GEN_PRINT_DELAY==0)
+        {
+            printf("Generation: %d, Max Score: %d, inst %d %d, min %d\n", gen, Scores[theBest[0]], 
+                gPopulation[theBest[0]].mGenes[0].mCode.size(), gPopulation[theBest[0]].mGenes.size(), min);
+            for(int i = 0;i<NUM_SURVIVORS;i++)
+            {
+                printf("%d ", Scores[theBest[i]]);
+            }   
+            printf("\n");
+
+            if(SAVE_FILE!="")
+            {
+                gPopulation[theBest[0]].save(SAVE_FILE);
+            }
+        }
+        
+        //Reproduce
+        for(int i = 0;i<POP_SIZE;i++)
+        {
+            if(LastBest[i]==0)
+            {
+                if(Scores[i]<Scores[theBest[NUM_SURVIVORS-1]])
+                {
+                    int r = rand()%NUM_SURVIVORS;
+                    gPopulation[i] = gPopulation[theBest[r]];
+                }
+                
+                gPopulation[i].mutate();
+            }
+            // else if(Scores[i]==0)
+            // {
+            //     gPopulation[i].mutate();
+            // }
+        }
+        memset(Scores, 0, POP_SIZE*sizeof(int));
+
+        // if(gen==1)   break;
+    }
+    
+    delete[] gPopulation;
+    delete[] gSupervisors;
+}
+
+void learn(int MAX_GEN)
+{
+    const std::string LOAD_FILE = "breakout_best";
+    const std::string SAVE_FILE = "breakout_best";
+
+    const int GEN_PRINT_DELAY = 1;
+
+    const int POP_SIZE = 10;
+    const int NUM_SURVIVORS = 1;
+    
+    AtariGame game("ALE/roms/breakout.bin",123,false);
+    // TicTacToe game;
+    game.mALE->act(PLAYER_A_FIRE);
+    ALEState baseState = game.mALE->cloneSystemState();
+    // const int REG_SIZE = 1000; 
     // const int INPUT_SIZE = 10;
     const int INPUT_SIZE = game.mALE->getRAM().size();
     const int REG_SIZE = 8;
@@ -31,7 +222,7 @@ void learn()
     exe.mInputs = game.mALE->getRAM().array();
     exe.reset();
     
-    gPopulation = new Genotype[POP_SIZE];
+    Genotype* gPopulation = new Genotype[POP_SIZE];
     int* Scores = new int[POP_SIZE];
     int* ELO = new int[POP_SIZE];
     int* LastBest = new int[POP_SIZE];
@@ -59,7 +250,7 @@ void learn()
     theBest.resize(NUM_SURVIVORS);
     
     bool running = true;
-    for(int gen = 0; running; gen++)
+    for(int gen = 0; gen != MAX_GEN; gen++)
     {
         //Test
         for(int i = 0;i<POP_SIZE;i++)
@@ -206,8 +397,6 @@ void learn()
             // Scores[i] = 0;
         }
         memset(Scores, 0, POP_SIZE*sizeof(int));
-
-        if(gen==1)   break;
     }
 
     delete[] gPopulation;
@@ -218,7 +407,7 @@ int main()
     srand(time(0));
     std::string s;
     
-    learn();
+    learn(-1);
     // test_lua();
     // test_execution();
     // test_save();
