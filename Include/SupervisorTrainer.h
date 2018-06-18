@@ -25,5 +25,5 @@ public:
 
 	void init();
 	void train();
-	void testSupervisor();
+	void testSupervisor(int num_gen, int sup_id, int sup_children);
 };
