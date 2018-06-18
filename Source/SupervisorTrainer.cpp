@@ -27,7 +27,7 @@ void SupervisorTrainer::init()
     
     mSupervisors = new Genotype[mNumSupervisors];
     mSupervisorScores = new int[mNumSupervisors];
-    mSupervisorBestID = new int[mNumSupervisors];
+    mSupervisorLastBest = new int[mNumSupervisors];
     mPopulation = new Genotype[mNumPopulation * mNumSupervisors];
     mScores = new int[mNumPopulation*mNumSupervisors];
     mLastBest = new int[mNumPopulation*mNumSupervisors];
@@ -54,7 +54,8 @@ void SupervisorTrainer::init()
         mSupervisors[i].mutate();
     }
 
-    mBestID.resize(mNumSurvivors*mNumSupervisors);
+    mBestID.resize(mNumSurvivors);
+    mSupervisorBestID.resize(mNumSupervisorSurvivors);
 }
 
 int SupervisorTrainer::testSupervisor(int num_gen, int sup_id, int sup_children)
