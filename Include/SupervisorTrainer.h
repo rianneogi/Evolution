@@ -3,17 +3,20 @@
 class SupervisorTrainer
 {
 public:
-
 	int mNumPopulation;
 	int mNumSupervisors;
 	int mNumSurvivors;
+	int mNumSupervisorSurvivors;
 
 	Genotype* mPopulation;
 	Genotype* mSupervisors;
 	int mGeneration;
 	int* mLastBest;
-	int* mScores;
+	int *mSupervisorLastBest;
+	int *mScores;
+	int *mSupervisorScores;
 	std::vector<int> mBestID;
+	std::vector<int> mSupervisorBestID;
 	Execution mExe;
 	AtariGame* mGame;
 
@@ -25,5 +28,5 @@ public:
 
 	void init();
 	void train();
-	void testSupervisor(int num_gen, int sup_id, int sup_children);
+	int testSupervisor(int num_gen, int sup_id, int sup_children);
 };
