@@ -73,7 +73,7 @@ void learn_sup()
                 //     Scores[i] += play_tictactoe(&gPopulation[i], exe, game);
                 // }
                 
-                Scores[i] = run_atari(game, exe, &gPopulation[i], baseState);
+                Scores[i] = run_atari(game, exe, &gPopulation[i]);
                 
                 printf("Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, Scores[i], gPopulation[i].mGenes[0].mCode.size(), gPopulation[i].mGenes.size());
             }
@@ -262,7 +262,7 @@ void learn(int MAX_GEN)
             //     Scores[i] += play_tictactoe(&gPopulation[i], exe, game);
             // }
             
-            Scores[i] = run_atari(game, exe, &gPopulation[i], baseState);
+            Scores[i] = run_atari(game, exe, &gPopulation[i]);
             
             printf("Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, Scores[i], gPopulation[i].mGenes[0].mCode.size(), gPopulation[i].mGenes.size());
             
