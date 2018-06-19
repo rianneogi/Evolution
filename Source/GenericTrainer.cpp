@@ -206,3 +206,11 @@ void GenericTrainer::train(int num_gen)
 		memset(mScores, 0, mNumPopulation * sizeof(int));
 	}
 }
+
+void GenericTrainer::cleanup()
+{
+	delete mGame;
+	delete[] mPopulation;
+	delete[] mScores;
+	delete[] mLastBest;
+}

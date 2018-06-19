@@ -19,7 +19,8 @@ public:
 	Execution mExe;
 
 	GenericTrainer() {}
-	~GenericTrainer() {}
+	~GenericTrainer() { cleanup(); }
 	void init(int pop, int survivors, const std::string &load_path, const std::string &save_path, int print_delay);
 	void train(int num_gen);
+	void cleanup();
 };

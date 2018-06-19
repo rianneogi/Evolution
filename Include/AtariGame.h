@@ -1,7 +1,7 @@
 #include "TicTacToe.h"
 // #include <string>
 
-class AtariGame
+class AtariGame : public Game
 {
 public:
     ALEInterface* mALE;
@@ -9,9 +9,11 @@ public:
     
     AtariGame(const std::string& rom, int seed, bool display);
     ~AtariGame();
-    
-    int make_move(int move);
+
+    int do_action(int action);
     bool is_over();
+    byte_t* getState();
+    int getStateSize();
     void restart();
     void resetState();
 };

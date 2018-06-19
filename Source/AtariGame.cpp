@@ -13,16 +13,26 @@ AtariGame::~AtariGame()
     delete mALE;
 }
 
-int AtariGame::make_move(int move)
+int AtariGame::do_action(int action)
 {
     ActionVect legal_actions = mALE->getMinimalActionSet();
-    
-    return mALE->act(legal_actions[move]);
+
+    return mALE->act(legal_actions[action]);
 }
 
 bool AtariGame::is_over()
 {
     return mALE->game_over();
+}
+
+byte_t* AtariGame::getState()
+{
+    return mALE->getRAM().array();
+}
+
+int AtariGame::getStateSize()
+{
+    return mALE->getRAM().size();
 }
 
 void AtariGame::restart()
@@ -72,7 +82,7 @@ int run_atari(AtariGame& game, Execution& exe, const Genotype* indi)
         int size = vect.size();
         // printf("movemade %d\n", exe.mRegisters[0]%size);
         // if(exe.mRegisters[0]>=size) exe.mRegisters[0]=size-1;
-        totalReward += game.make_move(exe.mRegisters[0]%size);
+        totalReward += game.do_action(exe.mRegisters[0]%size);
     }
     return totalReward;
 }
