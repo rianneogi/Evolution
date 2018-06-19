@@ -1,4 +1,4 @@
-#include "AtariGame.h"
+#include "GenericTrainer.h"
 
 void test_execution();
 

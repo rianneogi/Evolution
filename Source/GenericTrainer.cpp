@@ -214,3 +214,8 @@ void GenericTrainer::cleanup()
 	delete[] mScores;
 	delete[] mLastBest;
 }
+
+GenericTrainer::~GenericTrainer()
+{
+	cleanup();
+}

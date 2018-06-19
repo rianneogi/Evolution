@@ -405,9 +405,12 @@ void learn(int MAX_GEN)
 int main()
 {
     srand(time(0));
-    std::string s;
     
-    learn(-1);
+    GenericTrainer t;
+    t.init(100,5,"breakout_best","breakout_best",1);
+    t.train(-1);
+    
+    // learn(-1);
     // test_lua();
     // test_execution();
     // test_save();
