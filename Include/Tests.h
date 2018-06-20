@@ -1,4 +1,4 @@
-#include "GenericTrainer.h"
+#include "SupervisorTrainer.h"
 
 void test_execution();
 

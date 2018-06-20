@@ -1,4 +1,4 @@
-#include "Tests.h"
+#include "GenericTrainer.h"
 
 class SupervisorTrainer
 {
@@ -19,6 +19,7 @@ public:
 	std::vector<int> mSupervisorBestID;
 	Execution mExe;
 	AtariGame* mGame;
+	GenericTrainer* mTrainers;
 
 	std::string mLoadPath;
 	std::string mSavePath;

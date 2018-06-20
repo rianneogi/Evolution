@@ -56,8 +56,6 @@ void GenericTrainer::train(int num_gen)
 		//Test
 		for (int i = 0; i < mNumPopulation; i++)
 		{
-			// int agent_id = sup_children * sup_id + i;
-
 			// if(Scores[i]!=0) continue;
 
 			// for(int j = 0;j<20;j++)
@@ -125,7 +123,6 @@ void GenericTrainer::train(int num_gen)
 			int max_id = 0;
 			for (int j = 0; j < mNumPopulation; j++)
 			{
-				// int agent_id = sup_children * sup_id + j;
 				if (mLastBest[j] == 1)
 				{
 					continue;
@@ -152,7 +149,6 @@ void GenericTrainer::train(int num_gen)
 		int min_id = 0;
 		for (int j = 0; j < mNumPopulation; j++)
 		{
-			// int agent_id = sup_children * sup_id + j;
 			if (mLastBest[j] == 1)
 			{
 				continue;
@@ -183,8 +179,6 @@ void GenericTrainer::train(int num_gen)
 		//Reproduce
 		for (int i = 0; i < mNumPopulation; i++)
 		{
-			// int agent_id = sup_children * sup_id + i;
-
 			if (mLastBest[i] == 0)
 			{
 				if (mScores[i] < mScores[mBestID[mNumSurvivors - 1]])
