@@ -7,12 +7,13 @@ void SupervisorTrainer::init()
 
     const int GEN_PRINT_DELAY = 1;
 
-    mNumSupervisors = 10;
-    mNumPopulation = 10;
+    mNumSupervisors = 5;
+    mNumPopulation = 5;
     mNumSurvivors = 1;
     mNumSupervisorSurvivors = 1;
+    mNumSubGenerations = 5;
 
-    mGame = new AtariGame("ALE/roms/breakout.bin", 123, false);
+        mGame = new AtariGame("ALE/roms/breakout.bin", 123, false);
     // game.mALE->act(PLAYER_A_FIRE);
     ALEState baseState = mGame->mALE->cloneSystemState();
     const int INPUT_SIZE = mGame->mALE->getRAM().size();
@@ -57,8 +58,8 @@ void SupervisorTrainer::init()
         // mEnvs[i].mGame = mGame;
         mSupervisors[i].mutate();
         mTrainers[i].init(10,1,"","",1);
-        mTrainers[i].mEnv = &mEnvs[i];
         mEnvs[i] = SupervisedEnvironment(mGame, mTrainers[i].mPopulation, mTrainers[i].mNumPopulation, &mSupervisors[i]);
+        mTrainers[i].mEnv = &mEnvs[i];
         // mEnvs[i].mPopulationSize = mTrainers[i].mNumPopulation;
         // mEnvs[i].mPopulation = mTrainers[i].mPopulation;
     }
@@ -87,9 +88,9 @@ void SupervisorTrainer::train()
             // if(Scores[i]!=0) continue;
             
             // mScores[i] = run_atari(*mGame, mExe, &mPopulation[i]);
-            mSupervisorScores[i] = testSupervisor(10, i, mNumPopulation);
+            mSupervisorScores[i] = testSupervisor(mNumSubGenerations, i, mNumPopulation);
 
-            printf("Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, mScores[i], mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
+            printf("Supervisor Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, mScores[i], mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
         }
         
         //Cull
@@ -140,7 +141,7 @@ void SupervisorTrainer::train()
         //Print
         if(gen%GEN_PRINT_DELAY==0)
         {
-            printf("Generation: %d, Max Score: %d, inst %d %d, min %d\n", gen, mScores[mBestID[0]], 
+            printf("Supervisor Generation: %d, Max Score: %d, inst %d %d, min %d\n", gen, mScores[mBestID[0]], 
                 mPopulation[mBestID[0]].mGenes[0].mCode.size(), mPopulation[mBestID[0]].mGenes.size(), min);
             for(int i = 0;i<mNumSupervisorSurvivors;i++)
             {

@@ -7,6 +7,7 @@ public:
 	int mNumSupervisors;
 	int mNumSurvivors;
 	int mNumSupervisorSurvivors;
+	int mNumSubGenerations;
 
 	Genotype* mPopulation;
 	Genotype* mSupervisors;

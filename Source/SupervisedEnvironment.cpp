@@ -9,11 +9,13 @@ SupervisedEnvironment::SupervisedEnvironment(AtariGame* game, Genotype* pop, int
 	: Environment(game, pop, pop_size), mSupervisor(supervisor)
 {
 	mScores = new int[pop_size];
+	memset(mScores, 0, pop_size*sizeof(int));
 }
 
 SupervisedEnvironment::~SupervisedEnvironment()
 {
-	delete [] mScores;
+	if(mScores!=NULL)
+		delete [] mScores;
 }
 
 int SupervisedEnvironment::getFitness(int indi)
