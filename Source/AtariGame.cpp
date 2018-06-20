@@ -86,3 +86,27 @@ int run_atari(AtariGame& game, Execution& exe, const Genotype* indi)
     }
     return totalReward;
 }
+
+Vector2I run_atari_supervised(AtariGame& game, Execution& exe, const Genotype* indi, const Genotype* supervisor)
+{
+    game.restart();
+    exe.reset();
+    int gameReward = 0;
+    int supervisorReward = 0;
+    while (!game.is_over())
+    {
+        gameReward += game.mALE->act(PLAYER_A_FIRE);
+        exe.reset();
+        exe.run_code(indi, 0);
+
+        ActionVect vect = game.mALE->getMinimalActionSet();
+        int size = vect.size();
+        gameReward += game.do_action(exe.mRegisters[0] % size);
+
+        exe.reset();
+        exe.run_code(supervisor, 0);
+        supervisorReward += exe.mRegisters[0];
+
+    }
+    return Vector2I(gameReward, supervisorReward);
+}
