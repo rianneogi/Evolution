@@ -5,7 +5,8 @@ SupervisedEnvironment::SupervisedEnvironment()
 
 }
 
-SupervisedEnvironment::SupervisedEnvironment(Genotype* pop, int pop_size) : Environment(pop, pop_size)
+SupervisedEnvironment::SupervisedEnvironment(AtariGame* game, Genotype* pop, int pop_size, Genotype* supervisor) 
+	: Environment(game, pop, pop_size), mSupervisor(supervisor)
 {
 
 }

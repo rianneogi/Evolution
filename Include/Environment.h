@@ -9,7 +9,7 @@ public:
 	int mPopulationSize;
 
 	Environment();
-	Environment(Genotype* pop, int pop_size);
+	Environment(AtariGame* game, Genotype* pop, int pop_size);
 	virtual ~Environment();
 
 	virtual int getFitness(int indi);

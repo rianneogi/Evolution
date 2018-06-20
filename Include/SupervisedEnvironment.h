@@ -6,7 +6,7 @@ public:
 	Genotype* mSupervisor;
 
 	SupervisedEnvironment();
-	SupervisedEnvironment(Genotype* pop, int pop_size);
+	SupervisedEnvironment(AtariGame *game, Genotype *pop, int pop_size, Genotype *supervisor);
 	~SupervisedEnvironment();
 
 	int getFitness(int indi);

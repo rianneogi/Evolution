@@ -413,7 +413,6 @@ int main()
     // env->mPopulationSize = t.mNumPopulation;
     // env->mPopulation = t.mPopulation;
     // t.train(-1);
-
     SupervisorTrainer t;
     t.init();
     t.train();
