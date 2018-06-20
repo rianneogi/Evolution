@@ -1,5 +1,15 @@
 #include "SupervisedEnvironment.h"
 
+SupervisedEnvironment::SupervisedEnvironment()
+{
+
+}
+
+SupervisedEnvironment::~SupervisedEnvironment()
+{
+	
+}
+
 int SupervisedEnvironment::getFitness(const Genotype *indi)
 {
 	mGame->restart();

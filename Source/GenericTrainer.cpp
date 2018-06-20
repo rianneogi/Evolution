@@ -10,18 +10,18 @@ void GenericTrainer::init(int pop, int survivors, const std::string& load_path, 
 	mNumPopulation = pop;
 	mNumSurvivors = survivors;
 
-	mGame = new AtariGame("ALE/roms/breakout.bin", 123, false);
-	// game.mALE->act(PLAYER_A_FIRE);
-	ALEState baseState = mGame->mALE->cloneSystemState();
-	const int INPUT_SIZE = mGame->mALE->getRAM().size();
-	const int REG_SIZE = 8;
-	printf("INPUT SIZE: %d\n", INPUT_SIZE);
+	// mGame = new AtariGame("ALE/roms/breakout.bin", 123, false);
+	// // game.mALE->act(PLAYER_A_FIRE);
+	// ALEState baseState = mGame->mALE->cloneSystemState();
+	// const int INPUT_SIZE = mGame->mALE->getRAM().size();
+	// const int REG_SIZE = 8;
+	// printf("INPUT SIZE: %d\n", INPUT_SIZE);
 
-	mExe.mRegisters = new int[REG_SIZE];
-	mExe.mRegisterSize = REG_SIZE;
-	mExe.mInputSize = INPUT_SIZE;
-	mExe.mInputs = mGame->mALE->getRAM().array();
-	mExe.reset();
+	// mExe.mRegisters = new int[REG_SIZE];
+	// mExe.mRegisterSize = REG_SIZE;
+	// mExe.mInputSize = INPUT_SIZE;
+	// mExe.mInputs = mGame->mALE->getRAM().array();
+	// mExe.reset();
 
 	mPopulation = new Genotype[mNumPopulation];
 	mScores = new int[mNumPopulation];
@@ -50,6 +50,7 @@ void GenericTrainer::init(int pop, int survivors, const std::string& load_path, 
 
 void GenericTrainer::train(int num_gen)
 {
+	assert(mEnv!=NULL);
 	// bool running = true;
 	for (int gen = 0; gen != num_gen; gen++)
 	{
@@ -63,7 +64,8 @@ void GenericTrainer::train(int num_gen)
 			//     Scores[i] += play_tictactoe(&gPopulation[i], exe, game);
 			// }
 
-			mScores[i] = run_atari(*mGame, mExe, &mPopulation[i]);
+			// mScores[i] = run_atari(*mGame, mExe, &mPopulation[i]);
+			mScores[i] = mEnv->getFitness(&mPopulation[i]);
 
 			printf("Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, mScores[i], mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
 
@@ -203,7 +205,7 @@ void GenericTrainer::train(int num_gen)
 
 void GenericTrainer::cleanup()
 {
-	delete mGame;
+	// delete mEnv;
 	delete[] mPopulation;
 	delete[] mScores;
 	delete[] mLastBest;

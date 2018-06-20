@@ -406,7 +406,9 @@ int main()
 {
     srand(time(0));
     
+    Environment* env = new Environment();
     GenericTrainer t;
+    t.mEnv = env;
     t.init(100,5,"breakout_best","breakout_best",1);
     t.train(-1);
     

@@ -31,6 +31,8 @@ void SupervisorTrainer::init()
     mPopulation = new Genotype[mNumPopulation * mNumSupervisors];
     mScores = new int[mNumPopulation*mNumSupervisors];
     mLastBest = new int[mNumPopulation*mNumSupervisors];
+    mTrainers = new GenericTrainer[mNumSupervisors];
+    mEnvs = new SupervisedEnvironment[mNumSupervisors];
 
     //Load
     if(mLoadPath!="")
@@ -51,7 +53,10 @@ void SupervisorTrainer::init()
     }
     for(int i = 0;i<mNumSupervisors;i++)
     {
+        mEnvs[i].mSupervisor = &mSupervisors[i];
         mSupervisors[i].mutate();
+        mTrainers[i].init(10,1,"","",1);
+        mTrainers[i].mEnv = &mEnvs[i];
     }
 
     mBestID.resize(mNumSurvivors);

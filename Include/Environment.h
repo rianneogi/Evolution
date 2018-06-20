@@ -6,7 +6,7 @@ public:
 	AtariGame* mGame;
 	Execution mExe;
 
-	Environment() : mGame(NULL) {};
+	Environment();
 	virtual ~Environment();
 
 	virtual int getFitness(const Genotype* indi);

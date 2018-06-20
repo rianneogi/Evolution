@@ -1,4 +1,4 @@
-#include "Environment.h"
+#include "SupervisedEnvironment.h"
 
 class GenericTrainer 
 {
@@ -15,8 +15,9 @@ public:
 	std::string mLoadPath;
 	int mPrintDelay;
 
-	AtariGame* mGame;
-	Execution mExe;
+	// AtariGame* mGame;
+	// Execution mExe;
+	Environment* mEnv;
 
 	GenericTrainer() {}
 	~GenericTrainer();

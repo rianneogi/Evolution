@@ -15,7 +15,8 @@ public:
     byte_t* getState();
     int getStateSize();
     void restart();
-    void resetState();
+    void softReset();
+    void hardReset();
 };
 
 int run_atari(AtariGame& game, Execution& exe, const Genotype* indi);

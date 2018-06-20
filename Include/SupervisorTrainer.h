@@ -20,6 +20,7 @@ public:
 	Execution mExe;
 	AtariGame* mGame;
 	GenericTrainer* mTrainers;
+	SupervisedEnvironment* mEnvs;
 
 	std::string mLoadPath;
 	std::string mSavePath;

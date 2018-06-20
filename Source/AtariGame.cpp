@@ -37,12 +37,17 @@ int AtariGame::getStateSize()
 
 void AtariGame::restart()
 {
-    mALE->reset_game();
+    hardReset();
 }
 
-void AtariGame::resetState()
+void AtariGame::hardReset()
 {
     mALE->restoreSystemState(mBaseState);
+}
+
+void AtariGame::softReset()
+{
+    mALE->reset_game();
 }
 
 int run_atari(AtariGame& game, Execution& exe, const Genotype* indi)

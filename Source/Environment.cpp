@@ -1,8 +1,24 @@
 #include "Environment.h"
 
+Environment::Environment()
+{
+	mGame = new AtariGame("ALE/roms/breakout.bin", 123, false);
+	// game.mALE->act(PLAYER_A_FIRE);
+	ALEState baseState = mGame->mALE->cloneSystemState();
+	const int INPUT_SIZE = mGame->mALE->getRAM().size();
+	const int REG_SIZE = 8;
+	printf("INPUT SIZE: %d\n", INPUT_SIZE);
+
+	mExe.mRegisters = new int[REG_SIZE];
+	mExe.mRegisterSize = REG_SIZE;
+	mExe.mInputSize = INPUT_SIZE;
+	mExe.mInputs = mGame->mALE->getRAM().array();
+	mExe.reset();
+}
+
 Environment::~Environment()
 {
-
+	delete mGame;
 }
 
 int Environment::getFitness(const Genotype *indi)
