@@ -8,12 +8,12 @@ SupervisedEnvironment::SupervisedEnvironment()
 SupervisedEnvironment::SupervisedEnvironment(AtariGame* game, Genotype* pop, int pop_size, Genotype* supervisor) 
 	: Environment(game, pop, pop_size), mSupervisor(supervisor)
 {
-
+	mScores = new int[pop_size];
 }
 
 SupervisedEnvironment::~SupervisedEnvironment()
 {
-
+	delete [] mScores;
 }
 
 int SupervisedEnvironment::getFitness(int indi)
@@ -36,5 +36,6 @@ int SupervisedEnvironment::getFitness(int indi)
 		mExe.run_code(mSupervisor, 0);
 		supervisorReward += mExe.mRegisters[0];
 	}
+	mScores[indi] = gameReward;
 	return supervisorReward;
 }

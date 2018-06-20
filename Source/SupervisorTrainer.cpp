@@ -70,7 +70,8 @@ void SupervisorTrainer::init()
 int SupervisorTrainer::testSupervisor(int num_gen, int sup_id, int sup_children)
 {
     mTrainers[sup_id].train(num_gen);
-    return mTrainers[sup_id].mScores[mTrainers[sup_id].mBestID[0]];
+    // return mTrainers[sup_id].mScores[mTrainers[sup_id].mBestID[0]];
+    return mEnvs[sup_id].mScores[mTrainers[sup_id].mBestID[0]];
 }
 
 void SupervisorTrainer::train()
