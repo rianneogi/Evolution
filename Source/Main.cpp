@@ -406,11 +406,17 @@ int main()
 {
     srand(time(0));
     
-    Environment* env = new Environment();
-    GenericTrainer t;
-    t.mEnv = env;
-    t.init(100,5,"breakout_best","breakout_best",1);
-    t.train(-1);
+    // GenericTrainer t;
+    // Environment *env = new Environment(t.mPopulation, 100);
+    // t.mEnv = env;
+    // t.init(100, 5, "breakout_best", "breakout_best", 1);
+    // env->mPopulationSize = t.mNumPopulation;
+    // env->mPopulation = t.mPopulation;
+    // t.train(-1);
+
+    SupervisorTrainer t;
+    t.init();
+    t.train();
     
     // learn(-1);
     // test_lua();

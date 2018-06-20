@@ -1,7 +1,13 @@
 #include "Environment.h"
 
-Environment::Environment()
+Environment::Environment() : mPopulation(NULL), mPopulationSize(0)
 {
+
+}
+
+Environment::Environment(Genotype* pop, int pop_size) : mPopulation(pop), mPopulationSize(pop_size)
+{
+	// mPopulation = new Genotype[mPopulationSize];
 	mGame = new AtariGame("ALE/roms/breakout.bin", 123, false);
 	// game.mALE->act(PLAYER_A_FIRE);
 	ALEState baseState = mGame->mALE->cloneSystemState();
@@ -18,10 +24,10 @@ Environment::Environment()
 
 Environment::~Environment()
 {
-	delete mGame;
+	// delete mGame;
 }
 
-int Environment::getFitness(const Genotype *indi)
+int Environment::getFitness(int indi)
 {
 	mGame->restart();
 	// game.resetState();
@@ -35,7 +41,7 @@ int Environment::getFitness(const Genotype *indi)
 		totalReward += mGame->mALE->act(PLAYER_A_FIRE);
 		mExe.resetStep();
 
-		mExe.run_code(indi, 0);
+		mExe.run_code(&mPopulation[indi], 0);
 
 		ActionVect vect = mGame->mALE->getMinimalActionSet();
 		int size = vect.size();

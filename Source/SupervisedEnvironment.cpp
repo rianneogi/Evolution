@@ -5,12 +5,17 @@ SupervisedEnvironment::SupervisedEnvironment()
 
 }
 
-SupervisedEnvironment::~SupervisedEnvironment()
+SupervisedEnvironment::SupervisedEnvironment(Genotype* pop, int pop_size) : Environment(pop, pop_size)
 {
-	
+
 }
 
-int SupervisedEnvironment::getFitness(const Genotype *indi)
+SupervisedEnvironment::~SupervisedEnvironment()
+{
+
+}
+
+int SupervisedEnvironment::getFitness(int indi)
 {
 	mGame->restart();
 	mExe.reset();
@@ -20,7 +25,7 @@ int SupervisedEnvironment::getFitness(const Genotype *indi)
 	{
 		gameReward += mGame->mALE->act(PLAYER_A_FIRE);
 		mExe.reset();
-		mExe.run_code(indi, 0);
+		mExe.run_code(&mPopulation[indi], 0);
 
 		ActionVect vect = mGame->mALE->getMinimalActionSet();
 		int size = vect.size();

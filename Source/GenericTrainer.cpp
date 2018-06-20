@@ -65,9 +65,9 @@ void GenericTrainer::train(int num_gen)
 			// }
 
 			// mScores[i] = run_atari(*mGame, mExe, &mPopulation[i]);
-			mScores[i] = mEnv->getFitness(&mPopulation[i]);
+			mScores[i] = mEnv->getFitness(i);
 
-			printf("Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, mScores[i], mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
+			printf("Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, mScores[i], mEnv->mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
 
 			// for(int j = 0;j<NUM_SURVIVORS;j++)
 			// {

@@ -57,6 +57,9 @@ void SupervisorTrainer::init()
         mSupervisors[i].mutate();
         mTrainers[i].init(10,1,"","",1);
         mTrainers[i].mEnv = &mEnvs[i];
+        mEnvs[i] = SupervisedEnvironment(mTrainers[i].mPopulation, mTrainers[i].mNumPopulation);
+        // mEnvs[i].mPopulationSize = mTrainers[i].mNumPopulation;
+        // mEnvs[i].mPopulation = mTrainers[i].mPopulation;
     }
 
     mBestID.resize(mNumSurvivors);

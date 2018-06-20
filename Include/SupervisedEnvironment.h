@@ -6,7 +6,8 @@ public:
 	Genotype* mSupervisor;
 
 	SupervisedEnvironment();
+	SupervisedEnvironment(Genotype* pop, int pop_size);
 	~SupervisedEnvironment();
 
-	int getFitness(const Genotype* indi);
+	int getFitness(int indi);
 };
