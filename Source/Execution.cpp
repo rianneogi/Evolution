@@ -24,7 +24,10 @@ void Execution::run_code(const Genotype *indi, int code_id)
         arg1 = indi->mGenes[code_id].mCode[i].arg1;
         arg2 = indi->mGenes[code_id].mCode[i].arg2;
         
-        assert(arg1 >= 0 && arg2 >= 0 && type >= 0 && type < INST_NUM);
+        assert(arg1 >= 0);
+        assert(arg2 >= 0); 
+        assert(type >= 0);
+        assert(type < INST_NUM);
         
         if(type==INST_SET)
         {

@@ -2,8 +2,10 @@
 
 void SupervisorTrainer::init()
 {
-	mLoadPath = "breakout_best";
-    mSavePath = "breakout_best";
+	// mLoadPath = "breakout_best";
+    // mSavePath = "breakout_best";
+    mLoadPath = "";
+    mSavePath = "";
 
     const int GEN_PRINT_DELAY = 1;
 
@@ -13,7 +15,7 @@ void SupervisorTrainer::init()
     mNumSupervisorSurvivors = 1;
     mNumSubGenerations = 5;
 
-        mGame = new AtariGame("ALE/roms/breakout.bin", 123, false);
+    mGame = new AtariGame("ALE/roms/breakout.bin", 123, false);
     // game.mALE->act(PLAYER_A_FIRE);
     ALEState baseState = mGame->mALE->cloneSystemState();
     const int INPUT_SIZE = mGame->mALE->getRAM().size();
@@ -29,42 +31,42 @@ void SupervisorTrainer::init()
     mSupervisors = new Genotype[mNumSupervisors];
     mSupervisorScores = new int[mNumSupervisors];
     mSupervisorLastBest = new int[mNumSupervisors];
-    mPopulation = new Genotype[mNumPopulation * mNumSupervisors];
-    mScores = new int[mNumPopulation*mNumSupervisors];
-    mLastBest = new int[mNumPopulation*mNumSupervisors];
+    // mPopulation = new Genotype[mNumPopulation * mNumSupervisors];
+    // mScores = new int[mNumPopulation*mNumSupervisors];
+    // mLastBest = new int[mNumPopulation*mNumSupervisors];
     mTrainers = new GenericTrainer[mNumSupervisors];
     mEnvs = new SupervisedEnvironment[mNumSupervisors];
 
     //Load
     if(mLoadPath!="")
     {
-        mPopulation[0].load(mLoadPath);
-        for(int i = 1;i<mNumPopulation*mNumSupervisors;i++)
+        mSupervisors[0].load(mLoadPath);
+        for(int i = 1;i<mNumSupervisors;i++)
         {
-            mPopulation[i] = mPopulation[0];
+            mSupervisors[i] = mSupervisors[0];
         }
     }
     
     //Init
-    for(int i = 1;i<mNumPopulation*mNumSupervisors;i++) //mutate everyone except first
-    {
-        mPopulation[i].mutate();
-        mScores[i] = 0;
-        mLastBest[i] = 0;
-    }
+    // for(int i = 1;i<mNumPopulation*mNumSupervisors;i++) //mutate everyone except first
+    // {
+    //     mPopulation[i].mutate();
+    //     mScores[i] = 0;
+    //     mLastBest[i] = 0;
+    // }
     for(int i = 0;i<mNumSupervisors;i++)
     {
         // mEnvs[i].mSupervisor = &mSupervisors[i];
         // mEnvs[i].mGame = mGame;
         mSupervisors[i].mutate();
-        mTrainers[i].init(10,1,"","",1);
+        mTrainers[i].init(mNumPopulation,mNumSurvivors,"","",1);
         mEnvs[i] = SupervisedEnvironment(mGame, mTrainers[i].mPopulation, mTrainers[i].mNumPopulation, &mSupervisors[i]);
         mTrainers[i].mEnv = &mEnvs[i];
         // mEnvs[i].mPopulationSize = mTrainers[i].mNumPopulation;
         // mEnvs[i].mPopulation = mTrainers[i].mPopulation;
     }
 
-    mBestID.resize(mNumSurvivors);
+    // mBestID.resize(mNumSurvivors);
     mSupervisorBestID.resize(mNumSupervisorSurvivors);
 }
 
@@ -90,7 +92,7 @@ void SupervisorTrainer::train()
             // mScores[i] = run_atari(*mGame, mExe, &mPopulation[i]);
             mSupervisorScores[i] = testSupervisor(mNumSubGenerations, i, mNumPopulation);
 
-            printf("Supervisor Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, mScores[i], mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
+            printf("Supervisor Gen %d, Agent %d: Score %d\n", gen, i, mSupervisorScores[i]);
         }
         
         //Cull
@@ -141,17 +143,17 @@ void SupervisorTrainer::train()
         //Print
         if(gen%GEN_PRINT_DELAY==0)
         {
-            printf("Supervisor Generation: %d, Max Score: %d, inst %d %d, min %d\n", gen, mScores[mBestID[0]], 
-                mPopulation[mBestID[0]].mGenes[0].mCode.size(), mPopulation[mBestID[0]].mGenes.size(), min);
+            printf("Supervisor Generation: %d, Max Score: %d, inst %d %d, min %d\n", gen, mSupervisorScores[mSupervisorBestID[0]], 
+                mSupervisors[mSupervisorBestID[0]].mGenes[0].mCode.size(), mSupervisors[mSupervisorBestID[0]].mGenes.size(), min);
             for(int i = 0;i<mNumSupervisorSurvivors;i++)
             {
-                printf("%d ", mScores[mBestID[i]]);
+                printf("%d ", mSupervisorScores[mSupervisorBestID[i]]);
             }   
             printf("\n");
 
             if(mSavePath!="")
             {
-                mPopulation[mBestID[0]].save(mSavePath);
+                mSupervisors[mSupervisorBestID[0]].save(mSavePath);
             }
         }
         
@@ -160,10 +162,10 @@ void SupervisorTrainer::train()
         {
             if(mSupervisorLastBest[i]==0)
             {
-                if (mSupervisorScores[i] < mSupervisorScores[mBestID[mNumSupervisorSurvivors - 1]])
+                if (mSupervisorScores[i] < mSupervisorScores[mSupervisorBestID[mNumSupervisorSurvivors - 1]])
                 {
                     int r = rand()%mNumSupervisorSurvivors;
-                    mSupervisors[i] = mSupervisors[mBestID[r]];
+                    mSupervisors[i] = mSupervisors[mSupervisorBestID[r]];
                     // ELO[i] = ELO[theBest[r]];
                     // ELO[i] = 1500;
                 }

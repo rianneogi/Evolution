@@ -9,14 +9,14 @@ public:
 	int mNumSupervisorSurvivors;
 	int mNumSubGenerations;
 
-	Genotype* mPopulation;
+	// Genotype* mPopulation;
 	Genotype* mSupervisors;
-	int mGeneration;
-	int* mLastBest;
+	// int mGeneration;
+	// int* mLastBest;
 	int *mSupervisorLastBest;
-	int *mScores;
+	// int *mScores;
 	int *mSupervisorScores;
-	std::vector<int> mBestID;
+	// std::vector<int> mBestID;
 	std::vector<int> mSupervisorBestID;
 	Execution mExe;
 	AtariGame* mGame;
