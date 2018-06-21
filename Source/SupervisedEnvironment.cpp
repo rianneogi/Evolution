@@ -14,8 +14,8 @@ SupervisedEnvironment::SupervisedEnvironment(AtariGame* game, Genotype* pop, int
 
 SupervisedEnvironment::~SupervisedEnvironment()
 {
-	if(mScores!=NULL)
-		delete [] mScores;
+	// if(mScores!=NULL)
+		// delete [] mScores;
 }
 
 int SupervisedEnvironment::getFitness(int indi)
