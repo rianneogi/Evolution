@@ -9,11 +9,11 @@ void SupervisorTrainer::init()
 
 	const int GEN_PRINT_DELAY = 1;
 
-	mNumSupervisors = 5;
-	mNumPopulation = 5;
+	mNumSupervisors = 10;
+	mNumPopulation = 10;
 	mNumSurvivors = 1;
 	mNumSupervisorSurvivors = 1;
-	mNumSubGenerations = 5;
+	mNumSubGenerations = 10;
 
 	mGame = new AtariGame("ALE/roms/breakout.bin", 123, false);
 	// game.mALE->act(PLAYER_A_FIRE);
@@ -159,9 +159,14 @@ void SupervisorTrainer::train()
 				{
 					int r = rand()%mNumSupervisorSurvivors;
 					mSupervisors[i] = mSupervisors[mSupervisorBestID[r]];
+
+					for(int j = 0;j<mNumPopulation;j++) //copy the population also
+					{
+						mTrainers[i].mPopulation[j] = mTrainers[mSupervisorBestID[r]].mPopulation[j];
+					}
 				}
 				
-				// mSupervisors[i].mutate();
+				mSupervisors[i].mutate();
 			}
 			// else if(Scores[i]==0)
 			// {
