@@ -30,17 +30,28 @@ int Environment::getFitness(int indi)
 	// exe.mInputs = game.mALE->getRAM().array();
 	// exe.mInputSize = game.mALE->getRAM().size();
 	int totalReward = 0;
+	int score_count = 0;
+	int currReward = 0;
 	// indi->print();
 	while (!mGame->is_over())
 	{
 		totalReward += mGame->mALE->act(PLAYER_A_FIRE);
-		mExe.resetStep();
+		mExe.reset();
 
 		mExe.run_code(&mPopulation[indi], 0);
 
 		ActionVect vect = mGame->mALE->getMinimalActionSet();
 		int size = vect.size();
-		totalReward += mGame->do_action(mExe.mRegisters[0] % size);
+		currReward = mGame->do_action(mExe.mRegisters[0] % size);
+		totalReward += currReward;
+		if(currReward!=0)
+		{
+			score_count += 1;
+			if(score_count >= 20)
+			{
+				break;
+			}
+		}
 	}
 	return totalReward;
 }

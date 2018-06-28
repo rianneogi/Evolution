@@ -7,7 +7,7 @@ Gene::Gene()
     mCode.push_back(Instruction());
     mCode[0].type = INST_SET;
     mCode[0].arg1 = 0;
-    mCode[0].arg2 = 1;
+    mCode[0].arg2 = rand()%128;
 }
 
 Gene::~Gene()

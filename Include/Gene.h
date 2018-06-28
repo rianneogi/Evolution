@@ -25,7 +25,7 @@ struct Instruction
     int arg1;
     int arg2;
     
-    Instruction() : type(INST_SET), arg1(0), arg2(1) {}
+    Instruction() : type(INST_SET), arg1(0), arg2(rand()%128) {}
     Instruction(int t, int a1, int a2) : type(t), arg1(a1), arg2(a2) {}
     
     void mutate()

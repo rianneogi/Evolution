@@ -406,16 +406,17 @@ int main()
 {
     srand(time(0));
     
-    // GenericTrainer t;
-    // Environment *env = new Environment(t.mPopulation, 100);
-    // t.mEnv = env;
-    // t.init(100, 5, "breakout_best", "breakout_best", 1);
-    // env->mPopulationSize = t.mNumPopulation;
-    // env->mPopulation = t.mPopulation;
-    // t.train(-1);
-    SupervisorTrainer t;
-    t.init();
-    t.train();
+    GenericTrainer t;
+    AtariGame game("ALE/roms/space_invaders.bin",123,false);
+    Environment *env = new Environment(&game, t.mPopulation, 100);
+    t.mEnv = env;
+    t.init(100, 5, "spaceinvaders_best", "spaceinvaders_best", 1);
+    env->mPopulationSize = t.mNumPopulation;
+    env->mPopulation = t.mPopulation;
+    t.train(-1);
+    // SupervisorTrainer t;
+    // t.init();
+    // t.train();
     
     // learn(-1);
     // test_lua();
