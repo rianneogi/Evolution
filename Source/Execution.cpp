@@ -102,6 +102,36 @@ void Execution::run_code(const Genotype *indi, int code_id)
                 i = arg2-1;
             }
         }
+        else if(type==INST_ADD)
+        {
+            arg1 = arg2%mRegisterSize;
+            arg2 = arg2%mRegisterSize;
+            mRegisters[arg1] += mRegisters[arg2];
+        }
+        else if(type==INST_SUB)
+        {
+            arg1 = arg2%mRegisterSize;
+            arg2 = arg2%mRegisterSize;
+            mRegisters[arg1] -= mRegisters[arg2];
+            if(mRegisters[arg1]<0)
+            {
+                mRegisters[arg1] = 0;
+            }
+        }
+        else if(type==INST_INC)
+        {
+            arg1 = arg2%mRegisterSize;
+            mRegisters[arg1] += arg2;
+        }
+        else if(type==INST_DEC)
+        {
+            arg1 = arg2%mRegisterSize;
+            mRegisters[arg1] -= arg2;
+            if(mRegisters[arg1]<0)
+            {
+                mRegisters[arg1] = 0;
+            }
+        }
     }
 }
 

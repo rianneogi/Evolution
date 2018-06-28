@@ -407,7 +407,7 @@ int main()
     srand(time(0));
     
     GenericTrainer t;
-    AtariGame game("ALE/roms/space_invaders.bin",123,false);
+    AtariGame game("ALE/roms/space_invaders.bin",123,true);
     Environment *env = new Environment(&game, t.mPopulation, 100);
     t.mEnv = env;
     t.init(100, 5, "spaceinvaders_best", "spaceinvaders_best", 1);
