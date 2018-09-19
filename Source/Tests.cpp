@@ -17,7 +17,7 @@ void test_execution()
     indi.mGenes[0].mCode.push_back(Instruction(INST_SET, 0, 6));
     indi.mGenes[0].mCode.push_back(Instruction(INST_JUMP, 25, 10));
     indi.mGenes[0].mCode.push_back(Instruction());
-    
+        
     indi.print();
     
     int winner = -1;

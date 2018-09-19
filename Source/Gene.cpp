@@ -1,6 +1,6 @@
 #include "Gene.h"
 
-std::string gInstructionStrings[] = {"COPY", "SET", "JMP", "CALL", "COPY_IP", "JUMP_IP"};
+std::string gInstructionStrings[] = {"COPY", "SET", "JMP", "CALL", "COPY_IP", "JUMP_IP", "ADD", "SUB", "INC", "DEC"};
 
 Gene::Gene()
 {

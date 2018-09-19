@@ -35,7 +35,7 @@ int Environment::getFitness(int indi)
 	// indi->print();
 	while (!mGame->is_over())
 	{
-		totalReward += mGame->mALE->act(PLAYER_A_FIRE);
+		// totalReward += mGame->mALE->act(PLAYER_A_FIRE);
 		mExe.reset();
 
 		mExe.run_code(&mPopulation[indi], 0);
@@ -44,14 +44,14 @@ int Environment::getFitness(int indi)
 		int size = vect.size();
 		currReward = mGame->do_action(mExe.mRegisters[0] % size);
 		totalReward += currReward;
-		if(currReward!=0)
-		{
-			score_count += 1;
-			if(score_count >= 20)
-			{
-				break;
-			}
-		}
+		// if(currReward!=0)
+		// {
+		// 	score_count += 1;
+		// 	if(score_count >= 20)
+		// 	{
+		// 		break;
+		// 	}
+		// }
 	}
 	return totalReward;
 }

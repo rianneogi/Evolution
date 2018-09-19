@@ -413,6 +413,9 @@ int main()
     t.init(100, 5, "spaceinvaders_best", "spaceinvaders_best", 1);
     env->mPopulationSize = t.mNumPopulation;
     env->mPopulation = t.mPopulation;
+
+    t.mPopulation[0].print();
+
     t.train(-1);
     // SupervisorTrainer t;
     // t.init();
