@@ -18,6 +18,7 @@ int AtariGame::do_action(int action)
     ActionVect legal_actions = mALE->getMinimalActionSet();
 
     return mALE->act(legal_actions[action]);
+    mFrames++;
 }
 
 bool AtariGame::is_over()

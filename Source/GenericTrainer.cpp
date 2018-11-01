@@ -117,58 +117,113 @@ void GenericTrainer::train(int num_gen)
 			// }
 		}
 
+		int max_score = -100000;
+		int min_score = 100000;
+		int max_id = 0;
+		int avg_score = 0;
+		for(int i = 0;i<mNumPopulation;i++)
+		{
+			if(mScores[i] > max_score)
+			{
+				max_score = mScores[i];
+				max_id = i;
+			}
+			if(mScores[i] < min_score)
+			{
+				min_score = mScores[i];
+			}
+			avg_score += mScores[i];
+		}
+		avg_score /= mNumPopulation;
+
 		//Cull
 		memset(mLastBest, 0, mNumPopulation * sizeof(int));
-		for (int i = 0; i < mNumSurvivors; i++)
-		{
-			int max = -10000;
-			int max_id = 0;
-			for (int j = 0; j < mNumPopulation; j++)
-			{
-				if (mLastBest[j] == 1)
-				{
-					continue;
-				}
-				if (mScores[j] > max)
-				{
-					max = mScores[j];
-					max_id = j;
-				}
-				else if (mScores[j] >= max)
-				{
-					if (mPopulation[j].mGenes[0].mCode.size() >= mPopulation[max_id].mGenes[0].mCode.size()) //save the one with more instructions
-					{
-						max = mScores[j];
-						max_id = j;
-					}
-				}
-			}
-			mBestID[i] = max_id;
-			mLastBest[max_id] = 1;
-		}
+		mLastBest[max_id] = 1;
 
-		int min = 10000;
-		int min_id = 0;
-		for (int j = 0; j < mNumPopulation; j++)
+		std::vector<int> theBest;
+		theBest.push_back(max_id);
+
+		if(max_score > min_score)
 		{
-			if (mLastBest[j] == 1)
+			for(int i = 0;i<mNumPopulation;i++)
 			{
-				continue;
-			}
-			if (mScores[j] < min)
-			{
-				min = mScores[j];
-				min_id = j;
+				int threshold = (100*(mScores[i] - min_score))/(max_score - min_score);
+				if(rand()%100 <= threshold)
+				{
+					mLastBest[i] = 1;
+					theBest.push_back(i);
+				}
 			}
 		}
+		else
+		{
+			for(int i = 0;i<mNumPopulation;i++)
+			{
+				// int threshold = 50;
+				if(rand()%100 >= 50)
+				{
+					mLastBest[i] = 1;
+					theBest.push_back(i);
+				}
+			}
+		}
+		
+
+		// for (int i = 0; i < mNumSurvivors; i++)
+		// {
+		// 	int max = -10000;
+		// 	int max_id = 0;
+		// 	for (int j = 0; j < mNumPopulation; j++)
+		// 	{
+		// 		if (mLastBest[j] == 1)
+		// 		{
+		// 			continue;
+		// 		}
+		// 		if (mScores[j] > max)
+		// 		{
+		// 			max = mScores[j];
+		// 			max_id = j;
+		// 		}
+		// 		else if (mScores[j] >= max)
+		// 		{
+		// 			// if (mPopulation[j].mGenes[0].mCode.size() >= mPopulation[max_id].mGenes[0].mCode.size()) //save the one with more instructions
+		// 			// {
+		// 			// 	max = mScores[j];
+		// 			// 	max_id = j;
+		// 			// }
+		// 			if (mPopulation[j].mGenes.size() >= mPopulation[max_id].mGenes.size()) //save the one with more genes
+		// 			{
+		// 				max = mScores[j];
+		// 				max_id = j;
+		// 			}
+		// 		}
+		// 	}
+		// 	mBestID[i] = max_id;
+		// 	mLastBest[max_id] = 1;
+		// }
+
+		// int min = 10000;
+		// int min_id = 0;
+		// for (int j = 0; j < mNumPopulation; j++)
+		// {
+		// 	if (mLastBest[j] == 1)
+		// 	{
+		// 		continue;
+		// 	}
+		// 	if (mScores[j] < min)
+		// 	{
+		// 		min = mScores[j];
+		// 		min_id = j;
+		// 	}
+		// }
 
 		if (gen % mPrintDelay == 0)
 		{
-			printf("Generation: %d, Max Score: %d, inst %d %d, min %d\n", gen, mScores[mBestID[0]],
-				   mPopulation[mBestID[0]].mGenes[0].mCode.size(), mPopulation[mBestID[0]].mGenes.size(), min);
-			for (int i = 0; i < mNumSurvivors; i++)
+			printf("Generation: %d, Max Score: %d, inst %d %d, size: %d\n", gen, mScores[max_id],
+				   mPopulation[theBest[0]].mGenes[0].mCode.size(), mPopulation[theBest[0]].mGenes.size(), theBest.size());
+			for (int i = 0; i < theBest.size(); i++)
 			{
-				printf("%d ", mScores[mBestID[i]]);
+				printf("%d ", mScores[theBest[i]]);
 			}
 			printf("\n");
 
@@ -181,16 +236,38 @@ void GenericTrainer::train(int num_gen)
 		//Reproduce
 		for (int i = 0; i < mNumPopulation; i++)
 		{
-			if (mLastBest[i] == 0)
-			{
-				if (mScores[i] < mScores[mBestID[mNumSurvivors - 1]])
-				{
-					int r = rand() % mNumSurvivors;
-					mPopulation[i] = mPopulation[mBestID[r]];
-					// ELO[i] = ELO[theBest[r]];
-					// ELO[i] = 1500;
-				}
+			// if (mLastBest[i] == 0)
+			// {
+			// 	if (mScores[i] < mScores[mBestID[mNumSurvivors - 1]])
+			// 	{
+			// 		int r = rand() % mNumSurvivors;
+			// 		mPopulation[i] = mPopulation[mBestID[r]];
+			// 		// ELO[i] = ELO[theBest[r]];
+			// 		// ELO[i] = 1500;
+			// 	}
 
+			// 	// int r = rand() % theBest.size();
+			// 	// mPopulation[i] = mPopulation[theBest[r]];
+				
+			// 	mPopulation[i].mutate();
+			// }
+			if (mLastBest[i]==0)
+			{
+				// if (mScores[i] < mScores[mBestID[mNumSurvivors - 1]])
+				// {
+				// 	int r = rand() % mNumSurvivors;
+				// 	mPopulation[i] = mPopulation[mBestID[r]];
+				// 	// ELO[i] = ELO[theBest[r]];
+				// 	// ELO[i] = 1500;
+				// }
+
+				int r = rand() % theBest.size();
+				mPopulation[i] = mPopulation[theBest[r]];
+				
+				mPopulation[i].mutate();
+			}
+			else if(i!=max_id)
+			{
 				mPopulation[i].mutate();
 			}
 			// else if(Scores[i]==0)

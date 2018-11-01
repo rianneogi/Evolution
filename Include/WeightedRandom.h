@@ -9,7 +9,6 @@ class WeightedRandom
 {
 public:
     std::vector<int> mWeights;
-    std::string s;
     std::vector<int> mThresholds;
     
     WeightedRandom() {}

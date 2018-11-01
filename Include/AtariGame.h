@@ -6,6 +6,7 @@ class AtariGame : public Game
 public:
     ALEInterface* mALE;
     ALEState mBaseState;
+    int mFrames;
     
     AtariGame(const std::string& rom, int seed, bool display);
     ~AtariGame();
