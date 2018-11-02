@@ -147,6 +147,8 @@ void GenericTrainer::train(int num_gen)
 		{
 			for(int i = 0;i<mNumPopulation;i++)
 			{
+				if(i==max_id) continue;
+				
 				int threshold = (100*(mScores[i] - min_score))/(max_score - min_score);
 				if(rand()%100 <= threshold)
 				{

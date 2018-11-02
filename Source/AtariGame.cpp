@@ -38,8 +38,8 @@ int AtariGame::getStateSize()
 
 void AtariGame::restart()
 {
-    hardReset();
-    // softReset();
+    // hardReset();
+    softReset();
 }
 
 void AtariGame::hardReset()
