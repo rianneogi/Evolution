@@ -407,10 +407,10 @@ int main()
     srand(time(0));
     
     GenericTrainer t;
-    AtariGame game("ALE/roms/space_invaders.bin",123,false);
+    AtariGame game("ALE/roms/seaquest.bin",123,false);
     Environment *env = new Environment(&game, t.mPopulation, 100);
     t.mEnv = env;
-    t.init(100, 5, "spaceinvaders_best", "spaceinvaders_nondet_best", 1);
+    t.init(100, 5, "", "seaquest_2", 1);
     env->mPopulationSize = t.mNumPopulation;
     env->mPopulation = t.mPopulation;
 

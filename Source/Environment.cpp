@@ -33,8 +33,9 @@ int Environment::getFitness(int indi)
 	int score_count = 0;
 	int currReward = 0;
 	// indi->print();
-	while (!mGame->is_over())
+	while (!mGame->is_over() && mGame->mFrames <= 10000)
 	{
+		// printf("Frame: %d\n", mGame->mFrames);
 		// totalReward += mGame->mALE->act(PLAYER_A_FIRE);
 		mExe.reset();
 

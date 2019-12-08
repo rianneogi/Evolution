@@ -6,6 +6,7 @@ AtariGame::AtariGame(const std::string& rom, int seed, bool display)
 	mALE->setInt("random_seed", seed);
 	mALE->loadROM(rom);
     mBaseState = mALE->cloneSystemState();
+    mFrames = 0;
 }
 
 AtariGame::~AtariGame()
@@ -17,8 +18,8 @@ int AtariGame::do_action(int action)
 {
     ActionVect legal_actions = mALE->getMinimalActionSet();
 
-    return mALE->act(legal_actions[action]);
     mFrames++;
+    return mALE->act(legal_actions[action]);
 }
 
 bool AtariGame::is_over()
@@ -40,6 +41,7 @@ void AtariGame::restart()
 {
     // hardReset();
     softReset();
+    mFrames = 0;
 }
 
 void AtariGame::hardReset()
@@ -61,9 +63,11 @@ int run_atari(AtariGame& game, Execution& exe, const Genotype* indi)
     // exe.mInputSize = game.mALE->getRAM().size();
     int totalReward = 0;
     // indi->print();
-    while(!game.is_over())
+    while(!game.is_over() || game.mFrames>=1000)
     {
-        totalReward += game.mALE->act(PLAYER_A_FIRE);
+        // printf("frame %d\n", game.mFrames);
+        //// Send FIRE for breakout
+        // totalReward += game.mALE->act(PLAYER_A_FIRE);
         // exe.reset();
         exe.resetStep();
         
