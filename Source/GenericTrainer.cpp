@@ -79,53 +79,6 @@ void GenericTrainer::train(int num_gen)
 
 			printf("Thread: %d, Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n",
 				mThreadID, gen, i, mScores[i], mEnv->mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
-
-			// for(int j = 0;j<NUM_SURVIVORS;j++)
-			// {
-			//     int r = theBest[j];
-			//     int res1 = duel(&gPopulation[i], &gPopulation[r], exe, game);
-			//     int res2 = duel(&gPopulation[r], &gPopulation[i], exe, game);
-			
-			//     double qa = pow(10.0,ELO[i]/400.0);
-			//     double qb = pow(10.0,ELO[r]/400.0);
-			//     double ea = qa/(qa+qb);
-			//     double eb = qb/(qa+qb);
-			//     double sa=0,sb = 0;
-			//     if(res1==15)
-			//     {
-			//         sa+=0.25;
-			//         sb+=0.25;
-			//     }
-			//     if(res1>15)
-			//     {
-			//         sa+=0.5;
-			//     }
-			//     if(res1<15)
-			//     {
-			//         sb+=0.5;
-			//     }
-			//     if(res2==15)
-			//     {
-			//         sa+=0.25;
-			//         sb+=0.25;
-			//     }
-			//     if(res2<15)
-			//     {
-			//         sa+=0.5;
-			//     }
-			//     if(res2>15)
-			//     {
-			//         sb+=0.5;
-			//     }
-			
-			//     int diff = abs(ELO[i]-ELO[r]);
-			
-			//     ELO[i] += (sa-ea)*(32+0.1*diff);
-			//     ELO[r] += (sb-eb)*(32+0.1*diff);
-			
-			//     Scores[i] += res1;
-			//     Scores[i] += 30-res2;
-			// }
 		}
 
 		int max_score = -100000;
