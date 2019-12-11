@@ -7,6 +7,7 @@ public:
 	int* mScores;
 	int* mLastBest;
 	std::vector<int> mBestID;
+	int* mELO;
 
 	int mNumPopulation;
 	int mNumSurvivors;
@@ -18,10 +19,12 @@ public:
 	// AtariGame* mGame;
 	// Execution mExe;
 	Environment* mEnv;
+	TicTacToe mTicTacToe;
 
 	GenericTrainer() {}
 	~GenericTrainer();
 	void init(int pop, int survivors, const std::string &load_path, const std::string &save_path, int print_delay);
 	void train(int num_gen);
+	void train_competitive(int num_gen);
 	void cleanup();
 };

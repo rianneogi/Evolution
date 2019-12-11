@@ -55,7 +55,7 @@ void TicTacToe::restart()
 	mNumMoves = 0;
 }
 
-int duel_tictactoe(Genotype* p1, Genotype* p2, Execution& exe, TicTacToe& game)
+int duel_tictactoe(Genotype* p1, Genotype* p2, Execution& exe, TicTacToe& game) //two individuals play tictactoe
 {
     game.restart();
     while(game.is_over()==-1)
@@ -110,7 +110,7 @@ int duel_tictactoe(Genotype* p1, Genotype* p2, Execution& exe, TicTacToe& game)
     return game.is_over();
 }
 
-int play_tictactoe(Genotype* indi, Execution& exe, TicTacToe& game)
+int play_tictactoe(Genotype* indi, Execution& exe, TicTacToe& game) //individual plays tictactoe against a random opponent
 {
     game.restart();
     while(game.is_over()==-1)

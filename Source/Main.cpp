@@ -416,7 +416,7 @@ int main()
 
     t.mPopulation[0].print();
 
-    t.train(-1);
+    t.train_competitive(-1);
     // SupervisorTrainer t;
     // t.init();
     // t.train();
