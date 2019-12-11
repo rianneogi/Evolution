@@ -12,5 +12,6 @@ public:
 	Environment(AtariGame* game, Genotype* pop, int pop_size);
 	virtual ~Environment();
 
+	virtual void init(AtariGame* game, Genotype* pop, int pop_size);
 	virtual int getFitness(int indi);
 };

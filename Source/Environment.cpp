@@ -7,6 +7,20 @@ Environment::Environment() : mGame(NULL), mPopulation(NULL), mPopulationSize(0)
 
 Environment::Environment(AtariGame* game, Genotype* pop, int pop_size) : mGame(game), mPopulation(pop), mPopulationSize(pop_size)
 {
+	init(game, pop, pop_size);
+}
+
+Environment::~Environment()
+{
+	// delete mGame;
+}
+
+void Environment::init(AtariGame* game, Genotype* pop, int pop_size)
+{
+	mGame = game;
+	mPopulation = pop;
+	mPopulationSize = pop_size;
+
 	// mPopulation = new Genotype[mPopulationSize];
 	int REG_SIZE = 8;
 	int INPUT_SIZE = mGame->getStateSize();
@@ -15,11 +29,6 @@ Environment::Environment(AtariGame* game, Genotype* pop, int pop_size) : mGame(g
 	mExe.mInputSize = INPUT_SIZE;
 	mExe.mInputs = mGame->mALE->getRAM().array();
 	mExe.reset();
-}
-
-Environment::~Environment()
-{
-	// delete mGame;
 }
 
 int Environment::getFitness(int indi)

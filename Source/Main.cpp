@@ -1,7 +1,9 @@
 #include "Tests.h"
 
 #include <iostream>
+#include <future>
 #include <cmath>
+#include <string>
 
 void learn_sup()
 {
@@ -402,21 +404,62 @@ void learn(int MAX_GEN)
     delete[] gPopulation;
 }
 
+void train_parallel(int num_threads)
+{
+    GenericTrainer *trainers = new GenericTrainer[num_threads];
+    AtariGame *games = new AtariGame[num_threads];
+    Environment *envs = new Environment[num_threads];
+
+    for (int i = 0; i < num_threads;i++)
+    {
+        std::string save_file = "seaquest_best_" + std::to_string(i);
+
+        games[i].init("ALE/roms/seaquest.bin", 123, false);
+        envs[i].init(&games[i], trainers[i].mPopulation, 100);
+        trainers[i].mEnv = &(envs[i]);
+        trainers[i].init(100,5,save_file,save_file,1);
+        trainers[i].mThreadID = i;
+        envs[i].mPopulationSize = trainers[i].mNumPopulation;
+        envs[i].mPopulation = trainers[i].mPopulation;
+    }
+
+    for (int i = 1; i < num_threads;i++)
+    {
+        std::thread(&GenericTrainer::train, &trainers[i], -1).detach();
+    }
+    trainers[0].train(-1);
+}
+
 int main()
 {
     srand(time(0));
+
+    train_parallel(10);
+
+    // GenericTrainer t;
+    // AtariGame game("ALE/roms/seaquest.bin",123,false);
+    // Environment *env = new Environment(&game, t.mPopulation, 100);
+    // t.mEnv = env;
+    // t.init(100, 5, "seaquest_best", "seaquest_best", 1);
+    // env->mPopulationSize = t.mNumPopulation;
+    // env->mPopulation = t.mPopulation;
+
+    // GenericTrainer t2;
+    // AtariGame game2("ALE/roms/seaquest.bin",123,false);
+    // Environment *env2 = new Environment(&game2, t2.mPopulation, 100);
+    // t2.mEnv = env2;
+    // t2.init(100, 5, "seaquest_best", "seaquest_best_2", 1);
+    // env2->mPopulationSize = t2.mNumPopulation;
+    // env2->mPopulation = t2.mPopulation;
+
+    // t.mPopulation[0].print();
     
-    GenericTrainer t;
-    AtariGame game("ALE/roms/seaquest.bin",123,false);
-    Environment *env = new Environment(&game, t.mPopulation, 100);
-    t.mEnv = env;
-    t.init(100, 5, "", "seaquest_2", 1);
-    env->mPopulationSize = t.mNumPopulation;
-    env->mPopulation = t.mPopulation;
+    // // std::thread(&t2.train(-1));
+    // // std::thread(&GenericTrainer::train, t2, -1).detach();
+    // std::thread(&GenericTrainer::train, &t, -1).detach();
+    // // t.train(-1);
+    // t2.train(-1);
 
-    t.mPopulation[0].print();
-
-    t.train_competitive(-1);
     // SupervisorTrainer t;
     // t.init();
     // t.train();

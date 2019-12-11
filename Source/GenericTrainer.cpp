@@ -10,8 +10,6 @@ void GenericTrainer::init(int pop, int survivors, const std::string& load_path, 
 	mNumPopulation = pop;
 	mNumSurvivors = survivors;
 
-	int abc = pop;
-
 
 	// mGame = new AtariGame("ALE/roms/breakout.bin", 123, false);
 	// // game.mALE->act(PLAYER_A_FIRE);
@@ -29,6 +27,7 @@ void GenericTrainer::init(int pop, int survivors, const std::string& load_path, 
 	mPopulation = new Genotype[mNumPopulation];
 	mScores = new int[mNumPopulation];
 	mLastBest = new int[mNumPopulation];
+	mELO = new int[mNumPopulation];
 
 	//Load
 	if (mLoadPath != "")
@@ -70,15 +69,16 @@ void GenericTrainer::train(int num_gen)
 		{
 			// if(Scores[i]!=0) continue;
 
-			for(int j = 0;j<20;j++)
-			{
-			    mScores[i] += play_tictactoe(&mPopulation[i], mEnv->mExe, mTicTacToe);
-			}
+			// for(int j = 0;j<20;j++)
+			// {
+			//     mScores[i] += play_tictactoe(&mPopulation[i], mEnv->mExe, mTicTacToe);
+			// }
 
 			// mScores[i] = run_atari(*mGame, mExe, &mPopulation[i]);
-			// mScores[i] = mEnv->getFitness(i);
+			mScores[i] = mEnv->getFitness(i);
 
-			// printf("Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n", gen, i, mScores[i], mEnv->mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
+			printf("Thread: %d, Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n",
+				mThreadID, gen, i, mScores[i], mEnv->mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
 
 			// for(int j = 0;j<NUM_SURVIVORS;j++)
 			// {
@@ -232,7 +232,7 @@ void GenericTrainer::train(int num_gen)
 
 		if (gen % mPrintDelay == 0)
 		{
-			printf("Generation: %d, Max Score: %d, inst %d %d, size: %d\n", gen, mScores[max_id],
+			printf("Thread : %d, Generation: %d, Max Score: %d, inst %d %d, size: %d\n", mThreadID, gen, mScores[max_id],
 				   mPopulation[theBest[0]].mGenes[0].mCode.size(), mPopulation[theBest[0]].mGenes.size(), theBest.size());
 			// for (int i = 0; i < theBest.size(); i++)
 			// {

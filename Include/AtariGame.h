@@ -7,10 +7,12 @@ public:
     ALEInterface* mALE;
     ALEState mBaseState;
     int mFrames;
-    
-    AtariGame(const std::string& rom, int seed, bool display);
+
+    AtariGame();
+    AtariGame(const std::string &rom, int seed, bool display);
     ~AtariGame();
 
+    void init(const std::string &rom, int seed, bool display);
     int do_action(int action);
     bool is_over();
     byte_t* getState();

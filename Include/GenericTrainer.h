@@ -21,6 +21,8 @@ public:
 	Environment* mEnv;
 	TicTacToe mTicTacToe;
 
+	int mThreadID;
+
 	GenericTrainer() {}
 	~GenericTrainer();
 	void init(int pop, int survivors, const std::string &load_path, const std::string &save_path, int print_delay);

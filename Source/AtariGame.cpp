@@ -1,17 +1,27 @@
 #include "AtariGame.h"
 
+AtariGame::AtariGame()
+{
+
+}
+
 AtariGame::AtariGame(const std::string& rom, int seed, bool display)
+{
+    init(rom, seed, display);
+}
+
+AtariGame::~AtariGame()
+{
+    delete mALE;
+}
+
+void AtariGame::init(const std::string& rom, int seed, bool display)
 {
     mALE = new ALEInterface(display);
 	mALE->setInt("random_seed", seed);
 	mALE->loadROM(rom);
     mBaseState = mALE->cloneSystemState();
     mFrames = 0;
-}
-
-AtariGame::~AtariGame()
-{
-    delete mALE;
 }
 
 int AtariGame::do_action(int action)
