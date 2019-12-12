@@ -404,7 +404,7 @@ void learn(int MAX_GEN)
     delete[] gPopulation;
 }
 
-void train_parallel(int num_threads)
+void train_parallel(int num_threads, int mixing_step)
 {
     GenericTrainer *trainers = new GenericTrainer[num_threads];
     AtariGame *games = new AtariGame[num_threads];
@@ -422,19 +422,66 @@ void train_parallel(int num_threads)
         envs[i].mPopulationSize = trainers[i].mNumPopulation;
         envs[i].mPopulation = trainers[i].mPopulation;
     }
+    std::thread *threads = new std::thread[num_threads];
 
-    for (int i = 1; i < num_threads;i++)
+    int mixing_counter = 0;
+    while(true)
     {
-        std::thread(&GenericTrainer::train, &trainers[i], -1).detach();
+        for (int i = 0; i < num_threads; i++)
+        {
+            threads[i] = std::thread(&GenericTrainer::train, &trainers[i], mixing_step);
+            // threads[i].detach();
+
+            // trainers[i].train(mixing_step);
+        }
+        // trainers[0].train(-1);
+
+        for (int i = 0; i < num_threads;i++)
+        {
+            threads[i].join();
+        }
+        // threads[0].join();
+        //distribute max individual across all threads
+        int *max_id = new int[num_threads];
+        int *max = new int[num_threads];
+        for (int i = 0; i < num_threads; i++)
+        {
+            max_id[i] = 0;
+            max[i] = trainers[i].mScores[0];
+            for (int j = 0; j < trainers[i].mNumPopulation; j++)
+            {
+                if(trainers[i].mScores[j]>max[i])
+                {
+                    max_id[i] = j;
+                    max[i] = trainers[i].mScores[j];
+                }
+            }
+        }
+
+        for (int i = 0; i < num_threads;i++)
+        {
+            for (int j = 0; j < num_threads;j++)
+            {
+                trainers[i].mPopulation[j] = trainers[j].mPopulation[max_id[j]];
+            }
+        }
+
+        printf("Mixing %d, best scores: ", mixing_counter);
+        for (int i = 0; i < num_threads;i++)
+        {
+            printf("%d, ", max[i]);
+        }
+        printf("\n");
+
+        mixing_counter++;
     }
-    trainers[0].train(-1);
 }
 
 int main()
 {
     srand(time(0));
 
-    train_parallel(10);
+    train_parallel(10,5);
 
     // GenericTrainer t;
     // AtariGame game("ALE/roms/seaquest.bin",123,false);

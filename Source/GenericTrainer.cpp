@@ -64,6 +64,8 @@ void GenericTrainer::train(int num_gen)
 	// bool running = true;
 	for (int gen = 0; gen != num_gen; gen++)
 	{
+		memset(mScores, 0, mNumPopulation * sizeof(int));
+		
 		//Test
 		for (int i = 0; i < mNumPopulation; i++)
 		{
@@ -242,7 +244,7 @@ void GenericTrainer::train(int num_gen)
 			// }
 			// Scores[i] = 0;
 		}
-		memset(mScores, 0, mNumPopulation * sizeof(int));
+		// memset(mScores, 0, mNumPopulation * sizeof(int));
 	}
 }
 
