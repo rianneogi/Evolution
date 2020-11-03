@@ -104,13 +104,13 @@ void Execution::run_code(const Genotype *indi, int code_id)
         }
         else if(type==INST_ADD)
         {
-            arg1 = arg2%mRegisterSize;
+            arg1 = arg1%mRegisterSize;
             arg2 = arg2%mRegisterSize;
             mRegisters[arg1] += mRegisters[arg2];
         }
         else if(type==INST_SUB)
         {
-            arg1 = arg2%mRegisterSize;
+            arg1 = arg1%mRegisterSize;
             arg2 = arg2%mRegisterSize;
             mRegisters[arg1] -= mRegisters[arg2];
             if(mRegisters[arg1]<0)
@@ -120,12 +120,12 @@ void Execution::run_code(const Genotype *indi, int code_id)
         }
         else if(type==INST_INC)
         {
-            arg1 = arg2%mRegisterSize;
+            arg1 = arg1%mRegisterSize;
             mRegisters[arg1] += arg2;
         }
         else if(type==INST_DEC)
         {
-            arg1 = arg2%mRegisterSize;
+            arg1 = arg1%mRegisterSize;
             mRegisters[arg1] -= arg2;
             if(mRegisters[arg1]<0)
             {

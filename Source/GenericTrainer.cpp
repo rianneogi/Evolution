@@ -78,14 +78,16 @@ void GenericTrainer::train(int num_gen)
 
 			// mScores[i] = run_atari(*mGame, mExe, &mPopulation[i]);
 			mScores[i] = mEnv->getFitness(i);
+			// int fitness = mEnv->getFitness(i);
+			// assert(fitness == mScores[i]);
 
-			printf("Thread: %d, Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n",
-				mThreadID, gen, i, mScores[i], mEnv->mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
+			// printf("Thread: %d, Gen %d, Agent %d: Score %d, Inst: %d, Genes: %d\n",
+				// mThreadID, gen, i, mScores[i], mEnv->mPopulation[i].mGenes[0].mCode.size(), mPopulation[i].mGenes.size());
 		}
 
 		int max_score = -100000;
 		int min_score = 100000;
-		int max_id = 0;
+		int max_id = -1;
 		int avg_score = 0;
 		for(int i = 0;i<mNumPopulation;i++)
 		{
@@ -101,6 +103,7 @@ void GenericTrainer::train(int num_gen)
 			avg_score += mScores[i];
 		}
 		avg_score /= mNumPopulation;
+		assert(max_id != -1);
 
 		//Cull
 		memset(mLastBest, 0, mNumPopulation * sizeof(int));
@@ -115,7 +118,7 @@ void GenericTrainer::train(int num_gen)
 			{
 				if(i==max_id) continue;
 
-				int threshold = (100*(mScores[i] - min_score))/(max_score - min_score);
+				int threshold = (100.0*(mScores[i] - min_score))/(max_score - min_score);
 				if(rand()%100 <= threshold)
 				{
 					mLastBest[i] = 1;
@@ -127,6 +130,9 @@ void GenericTrainer::train(int num_gen)
 		{
 			for(int i = 0;i<mNumPopulation;i++)
 			{
+				if(i==max_id)
+					continue;
+				
 				// int threshold = 50;
 				if(rand()%100 <= 50)
 				{
@@ -185,9 +191,10 @@ void GenericTrainer::train(int num_gen)
 		// 	}
 		// }
 
+		assert(max_id == theBest[0]);
 		if (gen % mPrintDelay == 0)
 		{
-			printf("Thread : %d, Generation: %d, Max Score: %d, inst %d %d, size: %d\n", mThreadID, gen, mScores[max_id],
+			printf("Thread : %d, Generation: %d, Max Score: %d, inst %d %d, best size: %d\n", mThreadID, gen, mScores[max_id],
 				   mPopulation[theBest[0]].mGenes[0].mCode.size(), mPopulation[theBest[0]].mGenes.size(), theBest.size());
 			// for (int i = 0; i < theBest.size(); i++)
 			// {
@@ -197,7 +204,7 @@ void GenericTrainer::train(int num_gen)
 
 			if (mSavePath != "")
 			{
-				mPopulation[mBestID[0]].save(mSavePath);
+				mPopulation[max_id].save(mSavePath);
 			}
 		}
 
@@ -246,6 +253,12 @@ void GenericTrainer::train(int num_gen)
 		}
 		// memset(mScores, 0, mNumPopulation * sizeof(int));
 	}
+}
+
+void GenericTrainer::init_and_train(int num_gen, int pop, int survivors, const std::string& load_path, const std::string& save_path, int print_delay)
+{
+	init(pop, survivors, load_path, save_path, print_delay);
+	train(num_gen);
 }
 
 void GenericTrainer::train_competitive(int num_gen)

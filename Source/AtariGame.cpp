@@ -49,8 +49,8 @@ int AtariGame::getStateSize()
 
 void AtariGame::restart()
 {
-    // hardReset();
-    softReset();
+    hardReset();    //hard reset is necessary for deterministic simulations
+    // softReset();
     mFrames = 0;
 }
 
@@ -73,13 +73,13 @@ int run_atari(AtariGame& game, Execution& exe, const Genotype* indi)
     // exe.mInputSize = game.mALE->getRAM().size();
     int totalReward = 0;
     // indi->print();
-    while(!game.is_over() || game.mFrames>=1000)
+    while(!game.is_over() && game.mFrames<=10000)
     {
         // printf("frame %d\n", game.mFrames);
-        //// Send FIRE for breakout
+        // Send FIRE for breakout
         // totalReward += game.mALE->act(PLAYER_A_FIRE);
         // exe.reset();
-        exe.resetStep();
+        exe.reset();
         
         // auto screen = game.mALE->getScreen();
         // auto ram = game.mALE->getRAM();

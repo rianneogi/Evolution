@@ -1,5 +1,7 @@
 #pragma once
 
+#include <NNInclude.h>
+
 #include <ale_interface.hpp>
 // #include <random>
 #include <vector>
